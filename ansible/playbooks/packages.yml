@@ -1,0 +1,4 @@
+---
+pacotes:
+  - elinks
+  - wget

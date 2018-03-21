@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars:
+    - usuario: linus        
+  tasks:
+
+    - name: Adicionar usuario HelpDesk
+      user: 
+        name: "{{usuario}}"
+        state: present
+        shell: /bin/bash
+        password: $1$Vf3jj9E3$DTibRWkRvP8wJqcDLJNzT1

@@ -1,0 +1,31 @@
+---
+- hosts: local
+  tasks:
+    - name: Instala servidor NTP
+      apt:
+        name: ntp
+        state: installed
+        update_cache: true
+      register: ntp_installed
+      notify:
+        - Start NTP
+
+    - name: Define o arquivo de configuracao do servidor NTP
+      when: ntp_installed|success
+      copy:
+        src: /opt/4511/ansible/files/ntp.conf
+        dest: /etc/ntp.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Restart NTP
+
+  handlers:
+
+  - name: Start NTP
+    service: name=ntp state=started
+                                                              
+  - name: Restart NTP
+    service: name=ntp state=restarted
+

@@ -1,0 +1,68 @@
+---
+- name: Define a confifuracao PHP Memcached Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  copy:
+    src: php-memcached-debian.ini
+    dest: /etc/php/7.0/mods-available/memcache.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Apache
+  tags: web    
+
+- name: Define a confifuracao PHP Memcached RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  copy:
+    src: php-memcached-redhat.ini
+    dest: /etc/php.d/z-memcached.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Httpd
+  tags: web    
+
+- name: Criando diretorio lamp Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  copy:   
+    src: lamp/ 
+    dest: /var/www/html
+    owner: www-data
+    group: www-data
+  tags: web    
+
+- name: Criando diretorio lamp RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  copy:   
+    src: lamp/ 
+    dest: /var/www/html
+    owner: apache
+    group: apache
+  tags: web    
+
+- name: Cria pagina de Teste para PHP Memcached Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  copy:
+    src: cache-test.php
+    dest: /var/www/html/cache-test.php
+    owner: www-data
+    group: www-data
+    mode: 0644
+  tags: web
+
+- name: Cria pagina de Teste para PHP Memcached RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  copy:
+    src: cache-test.php
+    dest: /var/www/html/cache-test.php
+    owner: apache
+    group: apache
+    mode: 0644
+  tags: web
+
+- name: Remove o arquivo index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  tags: web

@@ -1,0 +1,61 @@
+---
+- hosts: all
+  tasks:
+    - name: Adiciona usuario HelpDesk
+      user: name=helpdesk state=present shell=/bin/bash password=$1$Vf3jj9E3$DTibRWkRvP8wJqcDLJNzT1
+      tags: users
+
+    - name: Adiciona usuario DevOps
+      user: name=devops state=present shell=/bin/bash password=$1$Vf3jj9E3$DTibRWkRvP8wJqcDLJNzT1
+      tags: users
+
+    - name: Instala pacotes base no Debian/Ubuntu
+      when: ansible_os_family == "Debian"
+      apt:
+        name: "{{item}}"
+        state: installed
+      with_items:
+        - tzdata
+        - dnsutils
+        - bash-completion
+        - unzip
+        - bzip2
+        - htop
+        - vim
+        - mlocate
+        - nfs-common
+      tags: packages
+
+    - name: Instala pacotes base no CentOS/RedHat
+      when: ansible_os_family == "RedHat"
+      yum:
+        name: "{{item}}"
+        state: installed
+      with_items:
+        - tzdata
+        - bind-utils
+        - unzip
+        - bzip2
+        - vim-enhanced
+        - mlocate
+        - htop
+        - nfs-utils
+      tags: packages
+
+    - name: Configuracao do arquivo /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item.ip }} {{ item.fqdn }} {{ item.alias }}"
+      with_items:
+        - { ip: '127.0.0.1', fqdn: 'localhost.localdomain', alias: 'localhost' }
+        - { ip: '172.16.100.100', fqdn: 'devops.dexter.com.br', alias: 'devops' }
+        - { ip: '172.16.100.101', fqdn: 'testing.dexter.com.br', alias: 'testing' }
+        - { ip: '172.16.100.102', fqdn: 'homolog.dexter.com.br', alias: 'homolog' }
+        - { ip: '172.16.100.103', fqdn: 'balancer.dexter.com.br', alias: 'balancer' }
+        - { ip: '172.16.100.104', fqdn: 'webserver01.dexter.com.br', alias: 'webserver01' }
+        - { ip: '172.16.100.105', fqdn: 'webserver02.dexter.com.br', alias: 'webserver02' }
+        - { ip: '172.16.100.106', fqdn: 'database.dexter.com.br', alias: 'database' }
+        - { ip: '172.18.0.101', fqdn: 'ansible-server.dexter.com.br', alias: 'ansible-server' }
+        - { ip: '172.18.0.102', fqdn: 'chef-server.dexter.com.br', alias: 'chef-server' }
+        - { ip: '172.18.0.103', fqdn: 'chef-workstation.dexter.com.br', alias: 'chef-workstation' }
+      tags: hosts

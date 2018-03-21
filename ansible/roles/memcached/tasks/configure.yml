@@ -1,0 +1,24 @@
+---
+- name: Define o arquivo de configuracao do servidor Memcached no Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  copy:
+    src: memcached-debian.conf
+    dest: /etc/memcached.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Memcached
+  tags: cache    
+
+- name: Define o arquivo de configuracao do servidor Memcached no RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  copy:
+    src: memcached-redhat.conf
+    dest: /etc/sysconfig/memcached
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Memcached
+  tags: cache    

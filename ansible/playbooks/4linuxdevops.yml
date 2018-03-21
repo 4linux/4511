@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - { role: confbase }
+#    - { role: memcached-server }
+#    - { role: mysql-server }
+#    - { role: web-server }
+#    - { role: web-server, memcached: 172.16.100.106, database: 172.16.100.106 }
+#    - { role: web-balancer, webserver01: 172.16.100.104, webserver02: 172.16.100.105, memcached: 172.16.100.106, database: 172.16.100.106 }

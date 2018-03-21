@@ -1,0 +1,30 @@
+---
+- name: Inclui variaveis para distribuicoes Linux
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: banco    
+
+- name: Instala pacotes para servidor MySQL no Debian 9
+  when: ansible_os_family == "Debian"
+  apt:
+    name: "{{packages_debian}}"
+    state: installed
+  notify:
+    - Start MySQL
+  tags: banco    
+
+- name: Instala pacotes para servidor MySQL no CentOS 7
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: "{{packages_redhat}}"
+    state: installed
+  notify:
+    - Start MySQL
+  tags: banco    
+
+- name: Inicia e ativa na inicializacao o servico mariadb
+  when: ansible_os_family == "RedHat"
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+  tags: banco    

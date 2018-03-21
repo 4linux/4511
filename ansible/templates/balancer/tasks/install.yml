@@ -1,0 +1,26 @@
+---
+- name: Instala servidor Nginx no Debian 9
+  when: ansible_os_family == "Debian"
+  apt:
+    name: nginx
+    state: installed
+  notify:
+    - Start Nginx
+  tags: balancer
+
+- name: Instala servidor Ngin no CentOS 7
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: nginx
+    state: installed
+  notify:
+    - Start Nginx
+  tags: balancer
+
+- name: Inicia e ativa na inicializacao o servico nginx
+  when: ansible_os_family == "RedHat"
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+  tags: balancer    

@@ -1,0 +1,198 @@
+---
+- hosts: all
+  tasks:
+    - name: Instala pacote python-mysqldb no Debian/Ubuntu
+      when: ansible_os_family == "Debian"
+      package:
+        name: python-mysqldb
+        state: installed
+      tags: banco
+
+    - name: Instala pacote MySQL-python no CentOS/RedHat
+      when: ansible_os_family == "RedHat"
+      package:
+        name: MySQL-python
+        state: installed
+      tags: banco
+
+    - name: Instala servidor MySQL
+      package:
+        name: mariadb-server
+        state: installed
+      notify:
+        - Start MySQL
+      register: mysql_installed
+      tags: banco
+
+    - name: Define o arquivo server.cnf
+      when: ansible_os_family == "RedHat"
+      copy:
+        src: /opt/4511/ansible/files/server.cnf
+        dest: /etc/my.cnf.d/server.cnf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Restart MySQL
+      tags: banco
+
+    - name: Define o arquivo 50-server.cnf
+      when: ansible_os_family == "Debian"
+      copy:
+        src: /opt/4511/ansible/files/50-server.cnf
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Restart MySQL
+      tags: banco
+
+    - name: Inicia servidor MySQL
+      when: ansible_os_family == "RedHat"
+      shell: systemctl start mariadb
+      tags: banco
+
+    - name: Define o arquivo .my.cnf
+      copy:
+        src: /opt/4511/ansible/files/root_pass.cnf
+        dest: /root/.my.cnf
+        owner: root
+        group: root
+        mode: 0600
+      tags: banco
+
+    - name: Configura senha do usuario root
+      mysql_user:
+        name: root
+        password: 4linux
+        check_implicit_admin: true
+      tags: banco
+
+    - name: Cria banco de dados lamp
+      mysql_db:
+        name: lamp
+        state: present
+      when: mysql_installed|success
+      tags: banco
+
+    - name: Adiciona usuario suporte e configura privilegios
+      mysql_user:
+        name: suporte
+        password: 4linux
+        host: "{{ item }}"
+        state: present
+        priv: lamp.*:ALL
+      with_items:
+        - '127.0.0.1'
+        - 'localhost'
+        - '%'
+      when: mysql_installed|success
+      tags: banco
+
+    - name: Instala Apache no Debian/Ubuntu com suporte a PHP
+      when: ansible_os_family == "Debian"
+      apt:
+        name: "{{ item }}"
+        state: installed
+        update_cache: true
+      with_items:
+        - apache2
+        - php
+        - php-mysql
+        - php-memcache
+      notify:
+        - Start Apache
+      tags: web
+        
+    - name: Instala Apache no CentOS/RedHat com suporte a PHP
+      when: ansible_os_family == "RedHat"
+      yum:
+        name: "{{ item }}"
+        state: installed
+      with_items:
+        - httpd
+        - php
+        - php-mysql
+        - php-pecl-memcached
+      notify:
+        - Start Httpd
+      tags: web
+
+    - name: Define o arquivo memcache.ini
+      when: ansible_os_family == "Debian"
+      copy:
+        src: /opt/4511/ansible/files/memcache.ini
+        dest: /etc/php/7.0/mods-available/memcache.ini
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Restart Apache
+      tags: web
+
+    - name: Define o arquivo z-memcached.ini
+      when: ansible_os_family == "RedHat"
+      copy:
+        src: /opt/4511/ansible/files/z-memcached.ini
+        dest: /etc/php.d/z-memcached.ini
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - Restart Httpd
+      tags: web
+
+    - name: Cria pagina de Teste para PHP Memcached Debian/Ubuntu
+      when: ansible_os_family == "Debian"
+      copy:
+        src: /opt/4511/ansible/files/cache-test.php
+        dest: /var/www/html/cache-test.php
+        owner: www-data
+        group: www-data
+        mode: 0644
+      tags: web
+    
+    - name: Cria pagina de Teste para PHP Memcached RedHat/CentOS
+      when: ansible_os_family == "RedHat"
+      copy:
+        src: /opt/4511/ansible/files/cache-test.php
+        dest: /var/www/html/cache-test.php
+        owner: apache
+        group: apache
+        mode: 0644
+      tags: web
+
+    - name: Define o arquivo index.php
+      copy:
+        src: /opt/4511/ansible/files/index.php
+        dest: /var/www/html
+        owner: root
+        group: root
+        mode: 0644
+      tags: web
+
+    - name: Remove o arquivo index.html
+      file:
+        path: /var/www/html/index.html
+        state: absent
+      tags: web
+
+  handlers:
+    - name: Start Apache
+      service: name=apache2 state=started
+
+    - name: Start Httpd
+      service: name=httpd state=started
+
+    - name: Start MySQL
+      service: name=mariadb state=started
+
+    - name: Restart Apache
+      service: name=apache2 state=restarted
+
+    - name: Restart Httpd
+      service: name=httpd state=restarted
+
+    - name: Restart MySQL
+      service: name=mariadb state=restarted

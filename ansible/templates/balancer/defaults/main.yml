@@ -1,0 +1,5 @@
+---
+balancer: localhost
+database: localhost
+webserver01: localhost
+webserver02: localhost

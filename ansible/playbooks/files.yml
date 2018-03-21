@@ -1,0 +1,21 @@
+---
+- hosts: local
+  tasks:
+    - name: Adiciona estrutura de diretorios
+      file:
+        dest: /srv/site/www
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+        recurse: true
+      register: directory_create
+
+    - name: Adiciona arquivo
+      when: directory_create|success
+      file:
+        path: /srv/site/www/index.html
+        state: touch
+        owner: www-data
+        group: www-data
+        mode: 0644

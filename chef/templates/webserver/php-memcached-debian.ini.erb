@@ -1,0 +1,9 @@
+extension = memcache.so
+
+[memcache]
+
+memcache.default_port = "11211"
+
+session.save_handler = "memcache"
+
+session.save_path = "tcp://<%= node['hostname'] %>:11211"

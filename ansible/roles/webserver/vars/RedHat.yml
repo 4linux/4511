@@ -1,0 +1,6 @@
+---
+packages_redhat:
+  - httpd
+  - php
+  - php-mysql
+  - php-pecl-memcached

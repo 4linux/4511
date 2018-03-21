@@ -1,0 +1,6 @@
+---
+sources:
+  operations:
+    remote: 'https://github.com/<user_github>/environments.git'
+    basedir: '/etc/puppetlabs/code/environments'
+    prefix: false

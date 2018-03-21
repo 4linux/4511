@@ -1,0 +1,13 @@
+---
+:url: "https://devops.dexter.com.br"
+:ssl_ca: "/etc/puppetlabs/puppet/ssl/ca/ca_crt.pem"
+:ssl_cert: "/etc/puppetlabs/puppet/ssl/certs/devops.dexter.com.br.pem"
+:ssl_key: "/etc/puppetlabs/puppet/ssl/private_keys/devops.dexter.com.br.pem"
+:user: ""
+:password: ""
+:puppetdir: "/opt/puppetlabs/server/data/puppetserver"
+:puppetuser: "puppet"
+:facts: true
+:timeout: 60
+:report_timeout: 60
+:threads: null

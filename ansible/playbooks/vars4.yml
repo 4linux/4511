@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: Adicionar estrutura de diretorios atraves de variavel
+      file:
+        dest: "{{diretorios}}"
+        state: directory
+        recurse: yes
+        owner: root
+        group: root
+        mode: 775

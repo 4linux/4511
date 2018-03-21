@@ -1,0 +1,26 @@
+---
+- name: Instala servidor Memcached no Debian 9
+  when: ansible_os_family == "Debian"
+  apt:
+    name: memcached
+    state: installed
+  notify:
+    - Start Memcached
+  tags: cache    
+
+- name: Instala servidor Memcached no CentOS 7
+  when: ansible_os_family == "RedHat"
+  yum:
+    name: memcached
+    state: installed
+  notify:
+    - Start Memcached
+  tags: cache    
+
+- name: Inicia e ativa na inicializacao o servico memcached
+  when: ansible_os_family == "RedHat"
+  systemd:
+    name: memcached
+    state: started
+    enabled: yes
+  tags: cache    

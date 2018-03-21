@@ -1,0 +1,92 @@
+---
+- name: Define a configuracao PHP Memcached Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  template:
+    src: php-memcached-debian.ini.j2
+    dest: /etc/php/7.0/mods-available/memcache.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Apache
+  tags: web    
+
+- name: Define a configuracao PHP Memcached RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  template:
+    src: php-memcached-redhat.ini.j2
+    dest: /etc/php.d/z-memcached.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Httpd
+  tags: web    
+
+- name: Criando diretorio lamp Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  copy:   
+    src: lamp/ 
+    dest: /var/www/html
+    owner: www-data
+    group: www-data
+  tags: web    
+
+- name: Criando diretorio lamp RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  copy:   
+    src: lamp/ 
+    dest: /var/www/html
+    owner: apache
+    group: apache
+  tags: web    
+
+- name: Define a configuracao do arquivo banco.php Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  template:
+    src: banco.php.j2
+    dest: /var/www/html/include/banco.php
+    owner: www-data
+    group: www-data
+    mode: 0644
+  notify:
+    - Restart Apache
+  tags: web    
+
+- name: Define a configuracao do arquivo banco.php RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  template:
+    src: banco.php.j2
+    dest: /var/www/html/include/banco.php
+    owner: apache
+    group: apache
+    mode: 0644
+  notify:
+    - Restart Httpd
+  tags: web
+
+- name: Cria pagina de Teste para PHP Memcached Debian/Ubuntu
+  when: ansible_os_family == "Debian"
+  template:
+    src: cache-test.php.j2
+    dest: /var/www/html/cache-test.php
+    owner: www-data
+    group: www-data
+    mode: 0644
+  tags: web
+
+- name: Cria pagina de Teste para PHP Memcached RedHat/CentOS
+  when: ansible_os_family == "RedHat"
+  template:
+    src: cache-test.php.j2
+    dest: /var/www/html/cache-test.php
+    owner: apache
+    group: apache
+    mode: 0644
+  tags: web
+
+- name: Remove o arquivo index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+  tags: web    

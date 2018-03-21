@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - /opt/4511/ansible/playbooks/packages.yml         
+  tasks:
+    - name: Instala pacotes atraves de variaveis
+      apt:
+        name: "{{pacotes}}"
+        state: installed

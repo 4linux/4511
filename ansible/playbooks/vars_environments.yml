@@ -1,0 +1,11 @@
+---
+- hosts: all
+  vars_files:
+    - "/etc/ansible/vars/{{ env }}.yml"
+  tasks:
+    - name: Adicionar usuario conforme o ambiente
+      user: 
+        name: "{{usuario}}"
+        state: present
+        shell: /bin/bash
+        password: $1$Vf3jj9E3$DTibRWkRvP8wJqcDLJNzT1
