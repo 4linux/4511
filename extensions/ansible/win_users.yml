@@ -1,0 +1,17 @@
+---
+- hosts: windows-server
+  gather_facts: false
+  tasks:
+    - name: Adiciona usuario suporte no Windows
+      win_user:
+        name: suporte
+        password: '4LinuxExtensions'
+        groups: Users
+        state: present
+
+    - name: Adiciona usuario devops no Windows
+      win_user:
+        name: devops
+        password: '4LinuxExtensions'
+        groups: Users
+        state: present

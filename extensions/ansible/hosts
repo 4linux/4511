@@ -1,0 +1,13 @@
+[local]
+127.0.0.1
+
+[windows-server]
+172.16.100.120
+
+[windows-server:vars]
+ansible_ssh_user=Administrator
+ansible_ssh_pass=4LinuxExtensions
+ansible_port=5986
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=ssl

@@ -1,0 +1,10 @@
+---
+version: 5
+defaults:
+  data_hash: yaml_data
+  datadir: data
+hierarchy:
+  - name: "Nome do certificado"
+    path: "%{::trusted.certname}.yaml"
+  - name: "Arquivo commmon.yaml"
+    path: "common.yaml"

@@ -1,0 +1,5 @@
+---
+packages: openssh-server
+service: sshd
+root_login: 'no'
+port_ssh: 51000

@@ -1,0 +1,5 @@
+---
+packages: ssh
+service: sshd
+root_login: 'forced-commands-only'
+port_ssh: 22

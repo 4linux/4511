@@ -1,0 +1,5 @@
+User_Alias SYSADMINS = suporte-devops
+
+Cmnd_Alias ADMCMD = /usr/bin/vim /etc/puppetlabs/code/environments/production/data/common.yaml, /usr/bin/vim /etc/puppetlabs/code/environments/production/data/balancer.dexter.com.br.yaml, /usr/bin/vim /etc/puppetlabs/code/environments/production/data/database.dexter.com.br.yaml
+
+SYSADMINS ALL=(ALL) ADMCMD

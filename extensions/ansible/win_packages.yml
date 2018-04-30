@@ -1,0 +1,18 @@
+---
+- hosts: windows-server
+  gather_facts: false
+  tasks:
+    - name: Instala Winrar no Windows
+      win_chocolatey:
+        name: winrar
+        state: present
+
+    - name: Instala Nginx no Windows
+      win_chocolatey:
+        name: nginx
+        state: present
+
+    - name: Instala Servico Nginx no Windows
+      win_chocolatey:
+        name: nginx-service
+        state: present

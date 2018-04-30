@@ -1,0 +1,4 @@
+User_Alias SYSADMINS = suporte
+Cmnd_Alias ADMCMD = /usr/bin/vim /root/chef-repo/data_bags/usuarios/helpdesk_item.json,/usr/bin/knife data bag from file usuarios /root/chef-repo/data_bags/usuarios/helpdesk_item.json -c /root/chef-repo/.chef/knife.rb,/usr/bin/knife cookbook upload usersdatabags -c /root/chef-repo/.chef/knife.rb
+root      ALL=(ALL) ALL
+SYSADMINS ALL=(ALL) ADMCMD

@@ -1,0 +1,15 @@
+---
+- hosts: windows-server
+  gather_facts: false
+  tasks:
+    - name: Inicia o servico W32Time no Windows
+      win_service:
+        name: W32Time
+        state: started
+        state_mode: auto
+
+    - name: Parar o servico nginx no Windows
+      win_service:
+        name: nginx
+        state: stopped
+        state_mode: auto

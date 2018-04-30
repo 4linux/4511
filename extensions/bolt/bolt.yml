@@ -1,0 +1,13 @@
+---
+#modulepath: "/root/.puppetlabs/task-modules/site:/root/.puppetlabs/task-modules/modules"
+concurrency: 10
+format: human
+log:
+  console:
+    level: warn
+  ~/.puppetlabs/debug.log:
+    level: debug
+    append: false
+ssh:
+  host-key-check: false
+  private-key: ~/.ssh/id_rsa

@@ -1,0 +1,5 @@
+---
+packages: ssh
+service: sshd
+root_login: 'yes'
+port_ssh: 52000

@@ -1,0 +1,15 @@
+groups:
+  - name: linux_nodes
+    nodes:
+      - balancer.dexter.com.br
+      - webserver01.dexter.com.br
+    config:
+      transport: ssh
+  - name: windows_nodes
+    nodes:
+      - windows-server.dexter.com.br
+    config:
+      transport: winrm
+      transports:
+      winrm:
+        ssl: false

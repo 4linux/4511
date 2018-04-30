@@ -1,0 +1,12 @@
+Port <%= @port_ssh %>
+ListenAddress 0.0.0.0
+
+LoginGraceTime 2m
+PermitRootLogin <%= @root_login %>
+ChallengeResponseAuthentication no
+
+UsePAM yes
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem	sftp	/usr/lib/openssh/sftp-server
